@@ -9,6 +9,13 @@ export const config: PlasmoCSConfig = {
 
 let counter = 0;
 
+const WRAPPER = "ytd-rich-grid-media";
+const TITLE = "#details yt-formatted-string";
+const IMG = "img";
+
+const BLOCKED_TEXT = "hi";
+const TITLE_REPLACE = "[RETRACTED]";
+
 window.addEventListener("load", () => {
   mainFunc();
 })
@@ -19,11 +26,22 @@ window.addEventListener("scroll", () => {
 });
 
 const mainFunc = () => {
-  const elements = document.querySelectorAll("ytd-rich-grid-media");
-  const elLen = elements.length;
+  const allVideoWrapper = document.querySelectorAll(WRAPPER);
+  const elLen = allVideoWrapper.length;
 
   if (elLen != counter) {
-    console.log(elLen);
-    counter = elLen;
+    allVideoWrapper.forEach((videoWrapper) => {
+      const titleElement = videoWrapper.querySelector(TITLE);
+      const titleText = titleElement.innerHTML;
+
+      if (titleText.toLowerCase().includes(BLOCKED_TEXT)) {
+        titleElement.innerHTML = TITLE_REPLACE;
+
+        const imgElements = videoWrapper.querySelectorAll(IMG);
+        imgElements.forEach((imgElement) => {
+          imgElement.style.visibility = "hidden";
+        });
+      }
+    });
   }
 }
